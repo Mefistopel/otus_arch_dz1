@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hello-ingress
@@ -7,9 +7,14 @@ metadata:
 spec:
   rules:
   - host: "arch.homework"
-  - http:
+    http:
       paths:
         - path: /health
+          pathType: Prefix
           backend:
-            serviceName: hello-service
-            servicePort: 8000
+            service:
+              name: hello-service
+              port:
+                number: 8000
+
+# curl -H "Host: arch.homework" http://localhost/health
