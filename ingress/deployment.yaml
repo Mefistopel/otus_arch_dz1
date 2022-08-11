@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: hello-deployment
+spec:
+    replicas: 2
+    selector:
+       matchLabels:
+          app: hello-expressjs-app
+    template:
+       metadata:
+          labels:
+             app: hello-expressjs-app
+       spec:
+          containers:
+          - name: hello-nodejs
+            image: jdkz/otus-dz1:v1
+            ports:
+              - name: web
+                containerPort: 8000
+                protocol: TCP
+            readinessProbe:
+               httpGet:
+                  path: /health
+                  port: 8000
+            livenessProbe:
+               failureThreshold: 5
+               httpGet:
+                  path: /health
+                  port: 8000
+               initialDelaySeconds: 120
+               timeoutSeconds: 40
+               periodSeconds: 90
